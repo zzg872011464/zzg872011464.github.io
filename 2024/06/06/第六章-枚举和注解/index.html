@@ -1,0 +1,191 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>第六章 枚举和注解 | Hexo</title><meta name="author" content="zzg"><meta name="copyright" content="zzg"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="item 34. 使用enum代替int常量 由于枚举类型本质上是不可变的,因此所有的字段都应该时final的,属性字段可以是公有的,但是最好设置为私有,并且提供公有的访问方法  如果重写了toString方法,应该考虑编写一个fromString,将自定义字符串表示转换回相应的枚举常量.下面的代码可以处理任意的枚举类,只要每个常量都有唯一的字符串表示 123456789&#x2F;&#x2F; Implementi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第六章 枚举和注解">
+<meta property="og:url" content="https://zzg872011464.github.io/2024/06/06/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%9E%9A%E4%B8%BE%E5%92%8C%E6%B3%A8%E8%A7%A3/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="item 34. 使用enum代替int常量 由于枚举类型本质上是不可变的,因此所有的字段都应该时final的,属性字段可以是公有的,但是最好设置为私有,并且提供公有的访问方法  如果重写了toString方法,应该考虑编写一个fromString,将自定义字符串表示转换回相应的枚举常量.下面的代码可以处理任意的枚举类,只要每个常量都有唯一的字符串表示 123456789&#x2F;&#x2F; Implementi">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2024-06-06T13:56:25.000Z">
+<meta property="article:modified_time" content="2024-06-06T13:57:00.459Z">
+<meta property="article:author" content="zzg">
+<meta property="article:tag" content="java基础">
+<meta property="article:tag" content="effective java读书笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://zzg872011464.github.io/2024/06/06/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%9E%9A%E4%B8%BE%E5%92%8C%E6%B3%A8%E8%A7%A3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=4.12.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.5.1/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.11.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '第六章 枚举和注解',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-06-06 21:57:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">第六章 枚举和注解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-06-06T13:56:25.000Z" title="发表于 2024-06-06 21:56:25">2024-06-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-06-06T13:57:00.459Z" title="更新于 2024-06-06 21:57:00">2024-06-06</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="第六章 枚举和注解"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="item-34-使用enum代替int常量"><a href="#item-34-使用enum代替int常量" class="headerlink" title="item 34. 使用enum代替int常量"></a>item 34. 使用<code>enum</code>代替<code>int</code>常量</h2><ol>
+<li><p>由于枚举类型本质上是不可变的,因此所有的字段都应该时<code>final</code>的,属性字段可以是公有的,但是最好设置为私有,并且提供公有的访问方法</p>
+</li>
+<li><p>如果重写了<code>toString</code>方法,应该考虑编写一个<code>fromString</code>,将自定义字符串表示转换回相应的枚举常量.下面的代码可以处理任意的枚举类,只要每个常量都有唯一的字符串表示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Implementing a fromString method on an enum type</span></span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Map&lt;String, Operation&gt; stringToEnum =</span><br><span class="line">		Stream.of(values()).collect(</span><br><span class="line">			toMap(Object::toString, e -&gt; e));</span><br><span class="line"></span><br><span class="line"><span class="comment">// Returns Operation for string, if any</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> Optional&lt;Operation&gt; <span class="title function_">fromString</span><span class="params">(String symbol)</span> &#123;</span><br><span class="line">	<span class="keyword">return</span> Optional.ofNullable(stringToEnum.get(symbol));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>如果我们要提供一个方法,这个方法对于每个常量都有着不同的行为,优雅的解决方案是在枚举类型中声明一个抽象方法,并在特定于常量的类主体中用一个具体的方法来重写该方法(使用策略枚举也可能是另一种好的解决方式)</p>
+</li>
+<li><p>在枚举上使用<code>switch</code>语句不是实现特定于常量的行为的一种很好的选择,在枚举上使用<code>switch</code>语句适合用于扩展特定于常量的行为,在以下两种情况出现时可以考虑使用</p>
+<ol>
+<li>枚举类不受我们控制,但是又希望对这个枚举类进行合适的扩充</li>
+<li>这个方法在某些地方是必要的,但是又不足以将其包含在这个枚举类中</li>
+</ol>
+</li>
+</ol>
+<hr>
+<h2 id="item-35-使用实例字段代替序号"><a href="#item-35-使用实例字段代替序号" class="headerlink" title="item 35. 使用实例字段代替序号"></a>item 35. 使用实例字段代替序号</h2><p>对于一个与枚举有关联的值,永远不要根据枚举的序号(通过<code>ordinal()</code>方法)将其计算出来,而是应该将其存储在一个实例字段中</p>
+<hr>
+<h2 id="item-36-使用EnumSet代替位域"><a href="#item-36-使用EnumSet代替位域" class="headerlink" title="item 36. 使用EnumSet代替位域"></a>item 36. 使用<code>EnumSet</code>代替位域</h2><p>如果底层的枚举类型的元素不超过64个,整个<code>EnumSet</code>会被视为一个单一的<code>long</code></p>
+<hr>
+<h2 id="item-37-不要以序号作为索引-使用EnumMap代替"><a href="#item-37-不要以序号作为索引-使用EnumMap代替" class="headerlink" title="item 37. 不要以序号作为索引,使用EnumMap代替"></a>item 37. 不要以序号作为索引,使用<code>EnumMap</code>代替</h2><p>依旧是慎用<code>ordinal()</code>方法,在使用<code>map</code>时不要使用索引,而是使用对应具体的枚举类型作为索引,这样做方便扩展,易于维护</p>
+<hr>
+<h2 id="item-38-使用接口模拟可扩展的枚举"><a href="#item-38-使用接口模拟可扩展的枚举" class="headerlink" title="item 38. 使用接口模拟可扩展的枚举"></a>item 38. 使用接口模拟可扩展的枚举</h2><p>在<code>运算码(opcode)</code>这个场景下,我们需要使用一个可扩展的枚举类型,运算码表示计算计算器支持的功能.有时,让API的用户提供他们自己的运算是可取的,这样可以有效扩充API所提供的运算集<br>幸运的是,虽然<strong>枚举类不可以被继承</strong>,但是可以基于枚举类型可以实现任意接口这一事实,为<code>opcode</code>类型定义一个接口,并定义一个枚举类作为该接口的标准实现,从而解决这一问题</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title function_">test</span><span class="params">(Collection&lt;? extends Operation&gt; opSet,</span></span><br><span class="line"><span class="params">    <span class="type">double</span> x, <span class="type">double</span> y)</span> &#123;</span><br><span class="line">        <span class="keyword">for</span> (Operation op : opSet)</span><br><span class="line">            System.out.printf(<span class="string">&quot;%f %s %f = %f%n&quot;</span>, x, op, y, op.apply(x, y));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="item-39-与命名模式相比首选注解"><a href="#item-39-与命名模式相比首选注解" class="headerlink" title="item 39. 与命名模式相比首选注解"></a>item 39. 与命名模式相比首选注解</h2><p>用来对注解类型进行注解的注解类被称之为元注解,例如<code>@Target</code>,<code>@Retention</code>,<code>@Documented</code>以及<code>@Inherited</code></p>
+<p>所有程序员都应该使用java提供的预定义的注解类型</p>
+<p>但是需要注意,有些注解尚未标准化,因此当我们换了工具,或出现了标准的注解时,可能需要做一些工作</p>
+<hr>
+<h2 id="item-40-始终使用Override注解"><a href="#item-40-始终使用Override注解" class="headerlink" title="item 40. 始终使用Override注解"></a>item 40. 始终使用<code>Override</code>注解</h2><hr>
+<h2 id="item-41-使用标记接口来定义类型"><a href="#item-41-使用标记接口来定义类型" class="headerlink" title="item 41. 使用标记接口来定义类型"></a>item 41. 使用标记接口来定义类型</h2><p>标记接口的好处是可以在编译时获取类型的存在,而注解不行,注解只能在运行时通过反射获取<br>标记注解的好处在于它们是更大的注解机制的一部分</p>
+<p>如果这个标记适用于除了类或者接口之外的任何程序元素,就必须使用注解<br>如果这个标记只适用于类和接口<code>(ElementType.TYPE)</code>,那么是否需要编写一种方法:它们只接收具有该标记的对象,如果是,那么应该使用标记接口而不是注解</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://zzg872011464.github.io">zzg</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://zzg872011464.github.io/2024/06/06/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%9E%9A%E4%B8%BE%E5%92%8C%E6%B3%A8%E8%A7%A3/">https://zzg872011464.github.io/2024/06/06/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%9E%9A%E4%B8%BE%E5%92%8C%E6%B3%A8%E8%A7%A3/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://zzg872011464.github.io" target="_blank">zzg</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/java%E5%9F%BA%E7%A1%80/">java基础</a><a class="post-meta__tags" href="/tags/effective-java%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">effective java读书笔记</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.3/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2024/05/24/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3/" title="第四章 类和接口"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">第四章 类和接口</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2024/04/11/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%88%9B%E5%BB%BA%E5%92%8C%E9%94%80%E6%AF%81%E5%AF%B9%E8%B1%A1/" title="第二章 创建和销毁对象"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-11</div><div class="title">第二章 创建和销毁对象</div></div></a></div><div><a href="/2024/04/13/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E6%B3%9B%E5%9E%8B/" title="第五章 泛型"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-04-13</div><div class="title">第五章 泛型</div></div></a></div><div><a href="/2024/05/10/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E6%89%80%E6%9C%89%E5%AF%B9%E8%B1%A1%E9%83%BD%E9%80%9A%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95/" title="第三章 对所有对象都通用的方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-10</div><div class="title">第三章 对所有对象都通用的方法</div></div></a></div><div><a href="/2024/05/24/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3/" title="第四章 类和接口"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-05-24</div><div class="title">第四章 类和接口</div></div></a></div><div><a href="/2023/11/30/2023-11%E6%9D%82%E8%B0%88/" title="2023-11杂谈"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-30</div><div class="title">2023-11杂谈</div></div></a></div><div><a href="/2024/01/20/2024-01%E6%9D%82%E8%B0%88/" title="2024-01杂谈"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2024-01-20</div><div class="title">2024-01杂谈</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">zzg</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">6</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/zzg872011464"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#item-34-%E4%BD%BF%E7%94%A8enum%E4%BB%A3%E6%9B%BFint%E5%B8%B8%E9%87%8F"><span class="toc-number">1.</span> <span class="toc-text">item 34. 使用enum代替int常量</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#item-35-%E4%BD%BF%E7%94%A8%E5%AE%9E%E4%BE%8B%E5%AD%97%E6%AE%B5%E4%BB%A3%E6%9B%BF%E5%BA%8F%E5%8F%B7"><span class="toc-number">2.</span> <span class="toc-text">item 35. 使用实例字段代替序号</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#item-36-%E4%BD%BF%E7%94%A8EnumSet%E4%BB%A3%E6%9B%BF%E4%BD%8D%E5%9F%9F"><span class="toc-number">3.</span> <span class="toc-text">item 36. 使用EnumSet代替位域</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#item-37-%E4%B8%8D%E8%A6%81%E4%BB%A5%E5%BA%8F%E5%8F%B7%E4%BD%9C%E4%B8%BA%E7%B4%A2%E5%BC%95-%E4%BD%BF%E7%94%A8EnumMap%E4%BB%A3%E6%9B%BF"><span class="toc-number">4.</span> <span class="toc-text">item 37. 不要以序号作为索引,使用EnumMap代替</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#item-38-%E4%BD%BF%E7%94%A8%E6%8E%A5%E5%8F%A3%E6%A8%A1%E6%8B%9F%E5%8F%AF%E6%89%A9%E5%B1%95%E7%9A%84%E6%9E%9A%E4%B8%BE"><span class="toc-number">5.</span> <span class="toc-text">item 38. 使用接口模拟可扩展的枚举</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#item-39-%E4%B8%8E%E5%91%BD%E5%90%8D%E6%A8%A1%E5%BC%8F%E7%9B%B8%E6%AF%94%E9%A6%96%E9%80%89%E6%B3%A8%E8%A7%A3"><span class="toc-number">6.</span> <span class="toc-text">item 39. 与命名模式相比首选注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#item-40-%E5%A7%8B%E7%BB%88%E4%BD%BF%E7%94%A8Override%E6%B3%A8%E8%A7%A3"><span class="toc-number">7.</span> <span class="toc-text">item 40. 始终使用Override注解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#item-41-%E4%BD%BF%E7%94%A8%E6%A0%87%E8%AE%B0%E6%8E%A5%E5%8F%A3%E6%9D%A5%E5%AE%9A%E4%B9%89%E7%B1%BB%E5%9E%8B"><span class="toc-number">8.</span> <span class="toc-text">item 41. 使用标记接口来定义类型</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/06/06/%E7%AC%AC%E5%85%AD%E7%AB%A0-%E6%9E%9A%E4%B8%BE%E5%92%8C%E6%B3%A8%E8%A7%A3/" title="第六章 枚举和注解">第六章 枚举和注解</a><time datetime="2024-06-06T13:56:25.000Z" title="发表于 2024-06-06 21:56:25">2024-06-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/24/%E7%AC%AC%E5%9B%9B%E7%AB%A0-%E7%B1%BB%E5%92%8C%E6%8E%A5%E5%8F%A3/" title="第四章 类和接口">第四章 类和接口</a><time datetime="2024-05-24T05:08:23.000Z" title="发表于 2024-05-24 13:08:23">2024-05-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/05/10/%E7%AC%AC%E4%B8%89%E7%AB%A0-%E5%AF%B9%E6%89%80%E6%9C%89%E5%AF%B9%E8%B1%A1%E9%83%BD%E9%80%9A%E7%94%A8%E7%9A%84%E6%96%B9%E6%B3%95/" title="第三章 对所有对象都通用的方法">第三章 对所有对象都通用的方法</a><time datetime="2024-05-10T02:10:19.000Z" title="发表于 2024-05-10 10:10:19">2024-05-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/13/%E7%AC%AC%E4%BA%94%E7%AB%A0-%E6%B3%9B%E5%9E%8B/" title="第五章 泛型">第五章 泛型</a><time datetime="2024-04-13T13:40:28.000Z" title="发表于 2024-04-13 21:40:28">2024-04-13</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2024/04/11/%E7%AC%AC%E4%BA%8C%E7%AB%A0-%E5%88%9B%E5%BB%BA%E5%92%8C%E9%94%80%E6%AF%81%E5%AF%B9%E8%B1%A1/" title="第二章 创建和销毁对象">第二章 创建和销毁对象</a><time datetime="2024-04-10T16:38:57.000Z" title="发表于 2024-04-11 00:38:57">2024-04-11</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2024 By zzg</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=4.12.0"></script><script src="/js/main.js?v=4.12.0"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@5.0.32/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
